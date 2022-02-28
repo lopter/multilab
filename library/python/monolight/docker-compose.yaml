@@ -1,0 +1,40 @@
+version: "3.7"
+services:
+  serialosc:
+    image: "docker-registry.kalessin.fr/nix/serialosc:latest"
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+    cap_drop: &cap_drop
+      - AUDIT_WRITE
+      - CHOWN
+      - DAC_OVERRIDE
+      - FOWNER
+      - FSETID
+      - KILL
+      - MKNOD
+      - NET_BIND_SERVICE
+      - NET_RAW
+      - SETFCAP
+      - SETGID
+      - SETPCAP
+      - SETUID
+      - SYS_CHROOT
+    restart: on-failure
+  lightsd:
+    image: "docker-registry.kalessin.fr/nix/lightsd:latest"
+    cap_drop: *cap_drop
+    # Use the host network so that we can broadcast the LIFX discovery packets:
+    network_mode: host
+    restart: on-failure
+  monolight:
+    image: "docker-registry.kalessin.fr/nix/monolight:latest"
+    cap_drop: *cap_drop
+    depends_on:
+      - serialosc
+      - lightsd
+    restart: on-failure
+    # attach to the container for debugging with pdb:
+    # stdin_open: true
+    # tty: true
+
+# vim: set ft=yaml sw=2 ts=2 sts=2 fdm=marker fmr=<<<,>>> et:
