@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with lightsd.  If not, see <http://www.gnu.org/licenses/>.
 
-from .base import UILayer  # noqa
+from .base import UIComponent, UILayer  # noqa
 from .buttons import (  # noqa
     Button,
     PowerButton,

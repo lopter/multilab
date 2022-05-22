@@ -20,10 +20,10 @@ import collections
 import lightsc
 import logging
 
-from typing import DefaultDict, Dict, List, Set
+from typing import DefaultDict, Dict, List, Optional, Set
 
 from lightsc.requests import GetLightState
-from lightsc.structs import LightBulb  # noqa
+from lightsc.structs import LightBulb
 
 from . import grids
 
@@ -32,12 +32,12 @@ KEEPALIVE_DELAY = 60
 
 logger = logging.getLogger("library.python.monolight")
 
-lightsd = None  # type: lightsc.LightsClient
+lightsd: Optional[lightsc.LightsClient] = None
 
-bulbs_by_label = {}  # type: Dict[str, LightBulb]
+bulbs_by_label: Dict[str, LightBulb] = {}
 bulbs_by_group: DefaultDict[str, Set[LightBulb]] = collections.defaultdict(set)
 
-_refresh_task = None  # type: asyncio.Task
+_refresh_task: Optional[asyncio.Task] = None
 
 
 def iter_targets(targets: List[str]):
@@ -54,6 +54,7 @@ def iter_targets(targets: List[str]):
 
 async def _poll(refresh_delay_s: float) -> None:
     global bulbs_by_label, bulbs_by_group
+    assert lightsd
 
     while True:
         try:
@@ -89,6 +90,8 @@ async def start_lightsd_connection(
 
 async def stop_all() -> None:
     global _refresh_task, lightsd
+    assert _refresh_task
+    assert lightsd
 
     _refresh_task.cancel()
     await asyncio.wait([_refresh_task])

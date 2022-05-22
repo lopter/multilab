@@ -23,7 +23,7 @@ import enum
 import logging
 import monome
 
-from typing import TYPE_CHECKING, Iterator, Tuple, NamedTuple, cast
+from typing import TYPE_CHECKING, Iterator, Tuple, NamedTuple, Optional
 from typing import List, Set  # noqa
 
 from .types import Dimensions, Position
@@ -135,7 +135,6 @@ class AIOSCMonolightApp(monome.GridApp):
 
     def __init__(self) -> None:
         monome.GridApp.__init__(self)
-        self._grid = None  # type: MonomeGrid
 
     def on_grid_ready(self) -> None:
         logger.info("Grid {} ready".format(self.grid.id))
@@ -168,12 +167,13 @@ class MonomeGrid:
         self.layers: List[UILayer] = []
         self._show_ui = asyncio.Event()
         self._show_ui.set()
-        self._input_queue = asyncio.Queue()  # type: asyncio.Queue
-        self._queue_get = None  # type: asyncio.Task
+        self._input_queue: asyncio.Queue[KeyPress] = asyncio.Queue()
+        self._queue_get: Optional[asyncio.Task] = None
         self._led_buffer = monome.GridBuffer(self.size.width, self.size.height)
 
     def shutdown(self):
         self._queue_get.cancel()
+        self._queue_get = None
         self.show_ui = False
         for layer in self.layers:
             layer.shutdown()
@@ -183,6 +183,8 @@ class MonomeGrid:
         self._input_queue.put_nowait(keypress)
 
     async def get_input(self) -> KeyPress:
+        if self._queue_get is None:
+            raise asyncio.CancelledError
         loop = asyncio.get_running_loop()
         self._queue_get = loop.create_task(self._input_queue.get())
         keypress = await asyncio.wait_for(self._queue_get, timeout=None)
@@ -228,10 +230,9 @@ async def start_serialosc_connection() -> None:
     _not_running_event = asyncio.Event()
     _not_running_event.set()
 
-    app = AIOSCMonolightApp()
-
     def serialosc_device_added(id: str, type: str, port: int) -> None:
         logger.info(f"connecting to {id} ({type})")
+        app = AIOSCMonolightApp()
         loop = asyncio.get_running_loop()
         loop.create_task(app.grid.connect("serialosc", port))
 

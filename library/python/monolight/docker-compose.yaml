@@ -19,20 +19,20 @@ services:
       - SETPCAP
       - SETUID
       - SYS_CHROOT
-    restart: on-failure
+    restart: unless-stopped
   lightsd:
     image: "docker-registry.kalessin.fr/nix/lightsd:latest"
     cap_drop: *cap_drop
     # Use the host network so that we can broadcast the LIFX discovery packets:
     network_mode: host
-    restart: on-failure
+    restart: unless-stopped
   monolight:
     image: "docker-registry.kalessin.fr/nix/monolight:latest"
     cap_drop: *cap_drop
     depends_on:
       - serialosc
       - lightsd
-    restart: on-failure
+    restart: unless-stopped
     # attach to the container for debugging with pdb:
     # stdin_open: true
     # tty: true

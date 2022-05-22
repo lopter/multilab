@@ -15,27 +15,23 @@
 # You should have received a copy of the GNU General Public License
 # along with lightsd.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import lightsc
 import logging
 
-from typing import TYPE_CHECKING, List, Type, Union
+from typing import List, Type
 
 from .. import bulbs
-
-if TYPE_CHECKING:
-    from .elements import UIComponent  # noqa
+from .elements import UIComponent
 
 logger = logging.getLogger("library.python.monolight.ui")
 
 
 class Action:
 
-    def __init__(self) -> None:
-        self._source = None  # type: UIComponent
-
-    def set_source(self, source: "UIComponent") -> "Action":
+    def set_source(self, source: UIComponent) -> None:
         self._source = source
-        return self
 
     async def _run(self) -> None:
         # NOTE: Must be re-entrant (which means that all attributes on
@@ -66,11 +62,11 @@ class Lightsd(Action):
         self._targets = targets or []
         self._batch = requests or []  # type: Lightsd.RequestTypeList
 
-    def add_target(self, target: str) -> "Lightsd":
+    def add_target(self, target: str) -> Lightsd:
         self._targets.append(target)
         return self
 
-    def add_request(self, type: RequestType) -> "Lightsd":
+    def add_request(self, type: RequestType) -> Lightsd:
         self._batch.append(type)
         return self
 
@@ -88,17 +84,3 @@ class Lightsd(Action):
             logger.warning("Request {} failed on batch-[{}]".format(
                 ex, ", ".join(requests)
             ))
-
-
-class Slide(Action):
-
-    def __init__(self, step: Union[float, int]) -> None:
-        Action.__init__(self)
-        self.step = step
-        self._step = step
-
-    def set_step(self, step: int) -> None:
-        self._step = step
-
-    async def _run(self) -> None:
-        await self._source.update(self._step)
