@@ -6,8 +6,11 @@ with (import ../../..) { inherit hostSystem; }; let
     version = "1.0.0-rc.1";
     doCheck = false;
     propagatedBuildInputs = [
-      hostPlatformPkgs.python39Packages.click
+      hostPlatform.pythonPkgs.click
+      hostPlatform.pythonPkgs.fastapi
+      hostPlatform.pythonPkgs.inotify-simple
+      hostPlatform.pythonPkgs.uvicorn
       thirdPkgs.redshift
     ];
   };
-in hostPlatformPkgs.python39Packages.buildPythonApplication params
+in hostPlatform.pythonPkgs.buildPythonApplication params

@@ -20,5 +20,8 @@ setuptools.setup(
     },
     install_requires=[
         "click",
+        "fastapi",
+        "inotify_simple",
+        "uvicorn",
     ],
 )
