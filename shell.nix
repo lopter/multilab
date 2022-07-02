@@ -1,15 +1,14 @@
 # We always want a shell where buildPlatform == hostPlatform,
-# hostSystem is only useful when using nix-build.
-with (import ./.) { hostSystem = "buildPlatform"; }; let
-  pkgs = buildPlatformPkgs;
+# specifying hostSystem is only useful when using nix-build.
+with (import ./.) { }; let
   pythonPackages = ps: [
     ps.ipython
     ps.click
   ];
-in
+in with buildPlatform;
   pkgs.mkShell {
     buildInputs = [
-      (pkgs.python39.withPackages pythonPackages)
+      (python.withPackages pythonPackages)
       pkgs.mypy
     ];
   }

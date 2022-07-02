@@ -11,6 +11,16 @@
     sources = sources;
     buildPlatformPkgs = buildPlatformPkgs;
     hostPlatformPkgs = hostPlatformPkgs;
+    hostPlatform = {
+      pkgs = hostPlatformPkgs;
+      python = hostPlatformPkgs.python39;
+      pythonPkgs = hostPlatformPkgs.python39Packages;
+    };
+    buildPlatform = {
+      pkgs = buildPlatformPkgs;
+      python = buildPlatformPkgs.python39;
+      pythonPkgs = buildPlatformPkgs.python39Packages;
+    };
     thirdPkgs = import ./third_party/. {
       inherit hostSystem buildPlatformPkgs hostPlatformPkgs;
     };
