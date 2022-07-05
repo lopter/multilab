@@ -2,10 +2,14 @@
 # hostSystem is only useful when using nix-build.
 with (import ./.) { hostSystem = "buildPlatform"; }; let
   pkgs = buildPlatformPkgs;
+  pythonPackages = ps: [
+    ps.ipython
+    ps.click
+  ];
 in
   pkgs.mkShell {
     buildInputs = [
-      (pkgs.python39.withPackages (ps: [ps.ipython]))
+      (pkgs.python39.withPackages pythonPackages)
       pkgs.mypy
     ];
   }

@@ -6,7 +6,7 @@ with open(filename, "rb") as fp:
     exec(code, globals(), locals())
 
 setuptools.setup(
-    name="fake_sun",
+    name="fake-sun",
     version=__version__,  # noqa
     description="My PWM LED driver for the Raspberry Pi Zero",
     author="Louis Opter",
@@ -15,7 +15,7 @@ setuptools.setup(
     include_package_data=True,
     entry_points={
         "console_scripts": [
-            "fake_sun = fake_sun.__main__:main",
+            "fake-sun = fake_sun.__main__:main",
         ],
     },
     install_requires=[

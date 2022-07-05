@@ -1,5 +1,6 @@
 { buildPlatformPkgs, hostPlatformPkgs }:
 let
+  # myStdenv = hostPlatformPkgs.stdenvAdapters.keepDebugInfo hostPlatformPkgs.stdenv;
   mkRedshift = { pname, version, src, meta }:
     hostPlatformPkgs.stdenv.mkDerivation {
       inherit pname version src meta;

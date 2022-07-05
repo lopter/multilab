@@ -1,22 +1,21 @@
-let
-  hostSystem = "raspberryPi";
+{ hostSystem ? "buildPlatform" }:
+with (import ../../..) { inherit hostSystem; }; let
+  rpiFakeSun = import ./. { inherit hostSystem; };
+  fakeSunUID = "61014";
+  fakeSunGID = "61014";
+  gpioGID = "61019";
 in
-  with (import ../../..) { inherit hostSystem; }; let
-    rpiFakeSun = import (./.) { inherit hostSystem; };
-    baseImage = buildPlatformPkgs.dockerTools.pullImage {
-      imageName = "arm32v6/alpine";
-      imageDigest = "sha256:e047bc2af17934d38c5a7fa9f46d443f1de3a7675546402592ef805cfa929f9d";
-      sha256 = "1ch2klpwcqm56rryjh5lhldy2v3rivz1x9fdcrhmvxk2qxvmlkyq";
-      finalImageName = "arm32v6/alpine";
-      finalImageTag = "latest";
+  hostPlatformPkgs.dockerTools.buildLayeredImage {
+    name = "docker-registry.kalessin.fr/nix/fake-sun";
+    tag = "latest";
+    contents = [ hostPlatformPkgs.tini rpiFakeSun ];
+    fromImage = thirdPkgs.docker.alpine;
+    config = {
+      Entrypoint = [ "/bin/tini" "--" ];
+      Env = [
+#       "PYTHONBREAKPOINT=remote_pdb.set_trace"
+        "REMOTE_PDB_HOST=0.0.0.0"
+        "REMOTE_PDB_PORT=4444"
+      ];
     };
-  in
-    hostPlatformPkgs.dockerTools.buildImage {
-      name = "fake_sun";
-      tag = "latest";
-
-      fromImage = baseImage;
-      fromImageTag = "latest";
-
-      contents = rpiFakeSun;
-    }
+  }
