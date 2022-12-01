@@ -1,18 +1,29 @@
-{ buildPlatformPkgs, hostPlatformPkgs }:
+{
+  autoconf,
+  automake,
+  fetchFromGitHub,
+  gettext,
+  intltool,
+  lib,
+  libtool,
+  pkg-config,
+  python,
+  stdenv,
+}:
 let
   # myStdenv = hostPlatformPkgs.stdenvAdapters.keepDebugInfo hostPlatformPkgs.stdenv;
   mkRedshift = { pname, version, src, meta }:
-    hostPlatformPkgs.stdenv.mkDerivation {
+    stdenv.mkDerivation {
       inherit pname version src meta;
 
       nativeBuildInputs = [
-        buildPlatformPkgs.autoconf
-        buildPlatformPkgs.automake
-        buildPlatformPkgs.gettext
-        buildPlatformPkgs.intltool
-        buildPlatformPkgs.libtool
-        buildPlatformPkgs.pkg-config
-        buildPlatformPkgs.python
+        autoconf
+        automake
+        gettext
+        intltool
+        libtool
+        pkg-config
+        python
       ];
 
       configureFlags = [
@@ -36,14 +47,14 @@ in
     pname = "redshift";
     version = "1.12";
 
-    src = buildPlatformPkgs.fetchFromGitHub {
+    src = fetchFromGitHub {
       owner = "jonls";
       repo = "redshift";
       rev = "v${version}";
       sha256 = "12cb4gaqkybp4bkkns8pam378izr2mwhr2iy04wkprs2v92j7bz6";
     };
 
-    meta = with buildPlatformPkgs.lib; {
+    meta = with lib; {
       description = "Screen color temperature manager";
       longDescription = ''
         Redshift adjusts the color temperature according to the position

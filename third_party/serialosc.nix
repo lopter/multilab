@@ -1,23 +1,35 @@
-{ buildPlatformPkgs, hostPlatformPkgs, libmonome }:
+{
+  fetchFromGitHub,
+  git,
+  lib,
+  libconfuse,
+  liblo,
+  libmonome,
+  libuv,
+  python3,
+  stdenv,
+  udev,
+  wafHook,
+}:
 let
   mkSerialOSC = { pname, version, src, meta }:
-    hostPlatformPkgs.stdenv.mkDerivation {
+    stdenv.mkDerivation {
       inherit pname version src meta;
 
       nativeBuildInputs = [
-        buildPlatformPkgs.wafHook
-        buildPlatformPkgs.python3
-        buildPlatformPkgs.git
+        wafHook
+        python3
+        git
       ];
 
       propagatedBuildInputs = [
-        hostPlatformPkgs.udev
+        udev
       ];
 
       buildInputs = [
-        hostPlatformPkgs.libconfuse
-        hostPlatformPkgs.liblo
-        hostPlatformPkgs.libuv
+        libconfuse
+        liblo
+        libuv
         libmonome
       ];
 
@@ -39,7 +51,7 @@ in
     pname = "serialosc";
     version = "1.4.3";
 
-    src = buildPlatformPkgs.fetchFromGitHub {
+    src = fetchFromGitHub {
       owner = "monome";
       repo = "serialosc";
       rev = "v${version}";
@@ -54,7 +66,7 @@ in
       fetchSubmodules = true;
     };
 
-    meta = with buildPlatformPkgs.lib; {
+    meta = with lib; {
       description = "An OSC server for monome devices";
       longDescription = ''
         serialosc is a daemon that waits for you to plug a monome in, then it

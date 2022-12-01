@@ -1,7 +1,7 @@
 { buildPlatformPkgs, hostPlatformPkgs }:
   let
     mkAiosc = { pname, version, src, meta }:
-      hostPlatformPkgs.python39Packages.buildPythonPackage rec {
+      hostPlatformPkgs.python3Packages.buildPythonPackage rec {
         inherit pname version src meta;
 
         doCheck = false;
@@ -10,7 +10,7 @@
     mkAiosc rec {
       pname = "aiosc";
       version = "0.1.4";
-      src = buildPlatformPkgs.python39Packages.fetchPypi {
+      src = buildPlatformPkgs.python3Packages.fetchPypi {
         inherit pname version;
         sha256 = "74c021a255c6e521bab8e16225654090c9c2c95b87015fabba60b59bd9c700e6";
       };

@@ -1,7 +1,7 @@
 { buildPlatformPkgs, hostPlatformPkgs, aiosc }:
   let
     mkPymonome = { pname, version, src, meta }:
-      hostPlatformPkgs.python39Packages.buildPythonPackage rec {
+      hostPlatformPkgs.python3Packages.buildPythonPackage rec {
         inherit pname version src meta;
 
         propagatedBuildInputs = [ aiosc ];
@@ -12,7 +12,7 @@
     mkPymonome rec {
       pname = "pymonome";
       version = "0.10.1";
-#     src = buildPlatformPkgs.python39Packages.fetchPypi {
+#     src = buildPlatformPkgs.python3Packages.fetchPypi {
 #       inherit pname version;
 #       sha256 = "3d67fad363bf85f15c33b73d6b55333ac63391130454c5110685574de3e8cfe0";
 #     };

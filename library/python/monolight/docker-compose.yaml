@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   serialosc:
-    image: "docker-registry.kalessin.fr/nix/serialosc:latest"
+    image: "docker-registry.kalessin.fr/nix/armv6l/serialosc:latest"
     devices:
       - "/dev/ttyUSB0:/dev/ttyUSB0"
     cap_drop: &cap_drop
@@ -21,13 +21,13 @@ services:
       - SYS_CHROOT
     restart: unless-stopped
   lightsd:
-    image: "docker-registry.kalessin.fr/nix/lightsd:latest"
+    image: "docker-registry.kalessin.fr/nix/armv6l/lightsd:latest"
     cap_drop: *cap_drop
     # Use the host network so that we can broadcast the LIFX discovery packets:
     network_mode: host
     restart: unless-stopped
   monolight:
-    image: "docker-registry.kalessin.fr/nix/monolight:latest"
+    image: "docker-registry.kalessin.fr/nix/armv6l/monolight:latest"
     cap_drop: *cap_drop
     depends_on:
       - serialosc

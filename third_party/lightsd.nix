@@ -1,11 +1,11 @@
-{ buildPlatformPkgs, hostPlatformPkgs }:
+{ cmake, fetchFromGitHub, lib, libevent, stdenv }:
 let
   mkLightsd = { pname, version, src, meta }:
-    hostPlatformPkgs.stdenv.mkDerivation {
+    stdenv.mkDerivation {
       inherit pname version src meta;
 
       nativeBuildInputs = [
-        buildPlatformPkgs.cmake
+        cmake
       ];
 
       cmakeFlags = [
@@ -15,7 +15,7 @@ let
       ];
 
       buildInputs = [
-        hostPlatformPkgs.libevent
+        libevent
       ];
     };
 in
@@ -23,14 +23,14 @@ in
     pname = "lightsd";
     version = "1.2.1";
 
-    src = buildPlatformPkgs.fetchFromGitHub {
+    src = fetchFromGitHub {
       owner = "lopter";
       repo = "lightsd";
       rev = "${version}";
       sha256 = "wCwV6RSwAsqxbTRii1c3SqVEzo8BZlmvyoxRpWP7n30=";
     };
 
-    meta = with buildPlatformPkgs.lib; {
+    meta = with lib; {
       description = "A daemon to control smart bulbs";
       longDescription = ''
         lightsd acts a central point of control for your LIFX WiFi bulbs.
