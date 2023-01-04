@@ -39,6 +39,8 @@ let
         ./serialosc_wscript_check_cc_execute_false.patch
       ];
 
+      dontAddWafCrossFlags = true;
+
       wafConfigureFlags = [
         "--disable-zeroconf"
         "--enable-system-libuv"
