@@ -24,9 +24,10 @@
         # module parameters provide easy access to attributes of the same
         # system.
 
-        # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
-        #packages.default = pkgs.hello;
-
+        # Looks like this has some setbacks see:
+        #
+        # https://discourse.nixos.org/t/using-nixpkgs-legacypackages-system-vs-import/17462/8
+        # https://zimbatm.com/notes/1000-instances-of-nixpkgs
         _module.args.pkgs = import inputs.nixpkgs {
           inherit system;
           overlays = import ./third_party/overlays.nix;
