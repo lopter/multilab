@@ -17,6 +17,8 @@
         ./library/python/fake_sun/flake-module.nix
         ./library/python/lightsc/flake-module.nix
         ./library/python/monolight/flake-module.nix
+
+        ./nixos/flake-module.nix
       ];
       systems = [ "x86_64-linux" ]; # "armv6l-linux" "aarch64-darwin"
       perSystem = { config, self', inputs', pkgs, system, ... }: {
