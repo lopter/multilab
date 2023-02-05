@@ -2,8 +2,13 @@
   description = "An homelab";
 
   inputs = {
-    nixpkgs.url = "github:lopter/nixpkgs/release-22.05-lo-patches";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
+
     flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
+
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs@{ flake-parts, ... }:

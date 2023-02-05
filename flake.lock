@@ -2,14 +2,16 @@
   "nodes": {
     "flake-parts": {
       "inputs": {
-        "nixpkgs-lib": "nixpkgs-lib"
+        "nixpkgs-lib": [
+          "nixpkgs"
+        ]
       },
       "locked": {
-        "lastModified": 1672616755,
-        "narHash": "sha256-dvwU2ORLpiP6ZMXL3CJ/qrqmtLBLF6VAc+Fois7Qfew=",
+        "lastModified": 1675295133,
+        "narHash": "sha256-dU8fuLL98WFXG0VnRgM00bqKX6CEPBLybhiIDIgO45o=",
         "owner": "hercules-ci",
         "repo": "flake-parts",
-        "rev": "87673d7c13a799d95ce25ff5dc7b9e15f01af2ea",
+        "rev": "bf53492df08f3178ce85e0c9df8ed8d03c030c9f",
         "type": "github"
       },
       "original": {
@@ -20,34 +22,32 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1656918958,
-        "narHash": "sha256-IOXBnVQHSp3JeD/qn8iQFgEMvnJGXpkzw2ruQSXsqaI=",
-        "owner": "lopter",
+        "lastModified": 1675512093,
+        "narHash": "sha256-u1CY4feK14B57E6T+0Bhkuoj8dpBxCPrWO+SP87UVP8=",
+        "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "da6a13da9d5ba0350c37445816c620c82b68c12a",
+        "rev": "8e8240194eda25b61449f29bb5131e02b28a5486",
         "type": "github"
       },
       "original": {
-        "owner": "lopter",
-        "ref": "release-22.05-lo-patches",
+        "owner": "NixOS",
+        "ref": "nixos-22.11",
         "repo": "nixpkgs",
         "type": "github"
       }
     },
-    "nixpkgs-lib": {
+    "nixpkgs-stable": {
       "locked": {
-        "dir": "lib",
-        "lastModified": 1672350804,
-        "narHash": "sha256-jo6zkiCabUBn3ObuKXHGqqORUMH27gYDIFFfLq5P4wg=",
+        "lastModified": 1675556398,
+        "narHash": "sha256-5Gf5KlmFXfIGVQb2hmiiE7FQHoLd4UtEhIolLQvNB/A=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "677ed08a50931e38382dbef01cba08a8f7eac8f6",
+        "rev": "e32c33811815ca4a535a16faf1c83eeb4493145b",
         "type": "github"
       },
       "original": {
-        "dir": "lib",
         "owner": "NixOS",
-        "ref": "nixos-unstable",
+        "ref": "release-22.11",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -55,7 +55,29 @@
     "root": {
       "inputs": {
         "flake-parts": "flake-parts",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "sops-nix": "sops-nix"
+      }
+    },
+    "sops-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-stable": "nixpkgs-stable"
+      },
+      "locked": {
+        "lastModified": 1675566616,
+        "narHash": "sha256-Wki1ffvQUIB044M9ltjOxpXJGsqnQiVQPvMpQ0RiEBE=",
+        "owner": "Mic92",
+        "repo": "sops-nix",
+        "rev": "4d16c18787ba8ff80c1ff8db25c5ca56f68ceed3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "repo": "sops-nix",
+        "type": "github"
       }
     }
   },

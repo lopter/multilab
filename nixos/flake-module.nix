@@ -4,6 +4,12 @@ let
   inherit (inputs) nixpkgs;
 in
 {
+  perSystem = { pkgs, ... }: {
+    devShells.secrets = with pkgs; mkShell {
+      buildInputs = [ sops ];
+    };
+  };
+
   flake.nixosConfigurations = {
     certbot-sfo-ashpool = lib.nixosSystem {
       system = "x86_64-linux";
