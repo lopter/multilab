@@ -93,6 +93,10 @@ def main(
         # different planters are synchronized:
         clock = 60  # seconds
         transition_clock = 1
+        # It would be better to actually compute that value based on current
+        # datetime in case the daemon is restarted during the sunrise
+        # transition and we miss when we go from night to sunrise.
+        dawn = datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc)
         while True:
             try:
                 period, transition = redshift.poll()
@@ -102,6 +106,8 @@ def main(
                 break
 
             if state.period != period:
+                if state.period == Period.NIGHT:
+                    dawn = datetime.datetime.now(datetime.timezone.utc)
                 if transition is None:
                     logger.info(f"period={period.value}")
                 else:
@@ -109,7 +115,7 @@ def main(
                 state.period = period
                 state.store(state_file_path)
 
-            brightness = state.brightness if period != Period.NIGHT else 0.
+            brightness = _compute_brightness(dawn, state, period)
             _set_brightness(pwm_chan, brightness, transition)
             if not pwm_chan.enable:
                 pwm_chan.enable = True
@@ -122,9 +128,9 @@ def main(
                     state = state_watcher.channel.get(timeout=delay)
                     logger.info(f"received new state: {state}")
                     # immediately set the new brightness if it changed
-                    brightness_changed = state.brightness != brightness
-                    if period != Period.NIGHT and brightness_changed:
-                        brightness = state.brightness
+                    # while accounting for morning_shift:
+                    if state.brightness != brightness:
+                        brightness = _compute_brightness(dawn, state, period)
                         _set_brightness(pwm_chan, brightness, transition)
                 except queue.Empty:
                     pass
@@ -193,3 +199,16 @@ def _set_brightness(
     if pwm_chan.duty_cycle != duty_cycle_ns:
         logger.info(f"setting brightness to {brightness}")
         pwm_chan.duty_cycle = duty_cycle_ns
+
+
+def _compute_brightness(
+    dawn: datetime.datetime,
+    state: models.State,
+    period: Period,
+) -> float:
+    if period == Period.NIGHT:
+        return 0.
+    lights_on_time = dawn + state.morning_shift
+    if datetime.datetime.now(datetime.timezone.utc) >= lights_on_time:
+        return state.brightness
+    return 0.
