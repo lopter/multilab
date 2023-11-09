@@ -22,6 +22,7 @@
         ./library/python/fake_sun/flake-module.nix
         ./library/python/lightsc/flake-module.nix
         ./library/python/monolight/flake-module.nix
+        ./library/python/ofxstatement/flake-module.nix
 
         ./nixos/flake-module.nix
       ];
