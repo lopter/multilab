@@ -1,6 +1,8 @@
 {
-  perSystem = {pkgs, self', ...}:
+  perSystem = {pkgs, system, ...}:
     let
+      dockerImages = import ../../../third_party/docker/images.nix;
+      alpineImageDetailsBySystem = dockerImages.alpineDetailsBySystem;
       params = {
         pname = "acl-watcher";
         src = ./.;
@@ -8,18 +10,18 @@
         doCheck = false;
         propagatedBuildInputs = [
           pkgs.acl
-          pkgs.python39Packages.click
-          pkgs.python39Packages.pywatchman
+          pkgs.python3Packages.click
+          pkgs.python3Packages.pywatchman
         ];
       };
-      aclWatcher = pkgs.python39Packages.buildPythonApplication params;
+      aclWatcher = pkgs.python3Packages.buildPythonApplication params;
     in {
       packages.acl_watcher = aclWatcher;
       packages.acl_watcher_docker = pkgs.dockerTools.buildLayeredImage {
         name = "docker-registry.kalessin.fr/nix/acl-watcher";
         tag = "latest";
         contents = [ pkgs.tini aclWatcher ];
-        fromImage = self'.packages.docker_alpine;
+        fromImage = pkgs.dockerTools.pullImage alpineImageDetailsBySystem.${system};
         config = {
           Entrypoint = [ "/bin/tini" "--" ];
           Env = [

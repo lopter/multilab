@@ -7,7 +7,6 @@
   lib,
   libtool,
   pkg-config,
-  python,
   stdenv,
 }:
 let
@@ -23,7 +22,6 @@ let
         intltool
         libtool
         pkg-config
-        python
       ];
 
       configureFlags = [
