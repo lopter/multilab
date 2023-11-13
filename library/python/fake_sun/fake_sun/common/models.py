@@ -5,7 +5,6 @@ import json
 import pydantic
 
 from pathlib import Path as P
-from typing import Optional
 
 from fake_sun.common.types import Period
 
