@@ -5,13 +5,8 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
 
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-
-    multilab-config.url = "git+ssh://gitolite.kalessin.fr/louis/multilab-config?ref=main";
-    multilab-config.inputs.nixpkgs.follows = "nixpkgs";
-
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+    # See https://github.com/NixOS/nixpkgs/pull/273697
+    nixpkgs.url = "github:lopter/nixpkgs/nixos-23.11-lo-patches";
   };
 
   outputs = inputs@{ flake-parts, ... }:

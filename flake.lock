@@ -7,24 +7,6 @@
         ]
       },
       "locked": {
-        "lastModified": 1698882062,
-        "narHash": "sha256-HkhafUayIqxXyHH1X8d9RDl1M2CkFgZLjKD3MzabiEo=",
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "rev": "8c9fa2545007b49a5db5f650ae91f227672c3877",
-        "type": "github"
-      },
-      "original": {
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "type": "github"
-      }
-    },
-    "flake-parts_2": {
-      "inputs": {
-        "nixpkgs-lib": "nixpkgs-lib"
-      },
-      "locked": {
         "lastModified": 1701473968,
         "narHash": "sha256-YcVE5emp1qQ8ieHUnxt1wCZCC3ZfAS+SRRWZ2TMda7E=",
         "owner": "hercules-ci",
@@ -33,82 +15,23 @@
         "type": "github"
       },
       "original": {
-        "id": "flake-parts",
-        "type": "indirect"
-      }
-    },
-    "home-manager": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1701728041,
-        "narHash": "sha256-x0pyrI1vC8evVDxCxyO6olOyr4wlFg9+VS3C3p4xFYQ=",
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "ac7216918cd65f3824ba7817dea8f22e61221eaf",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
         "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "type": "github"
-      }
-    },
-    "multilab-config": {
-      "inputs": {
-        "flake-parts": "flake-parts_2",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1702090265,
-        "narHash": "sha256-YGTcSZertoORgsGL/s0jZY5F3/n58ei2kiBn9F171LM=",
-        "ref": "main",
-        "rev": "79f7bb28288ce0eb4c03ad9d4e934816119d14df",
-        "revCount": 1,
-        "type": "git",
-        "url": "ssh://gitolite.kalessin.fr/louis/multilab-config"
-      },
-      "original": {
-        "ref": "main",
-        "type": "git",
-        "url": "ssh://gitolite.kalessin.fr/louis/multilab-config"
       }
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1701263465,
-        "narHash": "sha256-lNXUIlkfyDyp9Ox21hr+wsEf/IBklLvb6bYcyeXbdRc=",
-        "owner": "NixOS",
+        "lastModified": 1702428949,
+        "narHash": "sha256-y+xhd4vqIbgIwxcZocVGmW9Dp6uBPbhP5CcLtAYZsfY=",
+        "owner": "lopter",
         "repo": "nixpkgs",
-        "rev": "50aa30a13c4ab5e7ba282da460a3e3d44e9d0eb3",
+        "rev": "b284d6a98b6a9591903dd274d1dd811bc57c5137",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
-        "ref": "nixos-23.11",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs-lib": {
-      "locked": {
-        "dir": "lib",
-        "lastModified": 1701253981,
-        "narHash": "sha256-ztaDIyZ7HrTAfEEUt9AtTDNoCYxUdSd6NrRHaYOIxtk=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "e92039b55bcd58469325ded85d4f58dd5a4eaf58",
-        "type": "github"
-      },
-      "original": {
-        "dir": "lib",
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
+        "owner": "lopter",
+        "ref": "nixos-23.11-lo-patches",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -116,8 +39,6 @@
     "root": {
       "inputs": {
         "flake-parts": "flake-parts",
-        "home-manager": "home-manager",
-        "multilab-config": "multilab-config",
         "nixpkgs": "nixpkgs"
       }
     }
