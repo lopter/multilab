@@ -114,9 +114,6 @@
   };
 
   config = {
-    systemd.tmpfiles.rules = [
-      "d ${config.backups.restic.cacheDir} 0700 root root - -"
-    ];
     environment.etc."multilab-backups.json" = {
       text = builtins.toJSON config.backups;
     };
@@ -125,5 +122,46 @@
       rsync
       inputs'.multilab.packages.backups
     ];
+    systemd.tmpfiles.rules = [
+      "d ${config.backups.restic.cacheDir} 0700 root root - -"
+    ];
+    systemd.timers."multilab-backups" = {
+      description = "Start multilab-backups.service regularly";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      timerConfig = {
+        OnActiveSec = "12h";
+        OnUnitActiveSec = "1d";
+        Unit = "multilab-backups.service";
+      };
+    };
+    systemd.services."multilab-backups" = {
+      description = "Run local backup jobs defined in the config.";
+      path = [ inputs'.multilab.packages.backups ];
+      onFailure = [ "multilab-backups-notify-fail.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "multilab-backups-dump run";
+        Nice = 10;
+        IOSchedulingPriority = 7;
+      };
+    };
+    systemd.services."multilab-backups-notify-fail" = {
+      description = "Send an email to root when the backups fail to run.";
+      path = with pkgs; [ mailutils nettools ];
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = pkgs.writeShellScript "multilab-backups-notify-fail" ''
+          mail --config-verbose -s 'multilab-backups-dump failed to run on ${config.networking.hostName}' root <<EOF
+          systemctl status multilab-backups.service:
+
+          $(systemctl status multilab-backups.service)
+
+          -- 
+          $0 running on $(hostname)
+          EOF
+        '';
+      };
+    };
   };
 }

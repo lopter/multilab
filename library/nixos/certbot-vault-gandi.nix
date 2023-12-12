@@ -1,3 +1,7 @@
+# TODO:
+#
+# Make sure the renewal command works correctly
+# and setup a periodic job to call cerbot.
 { config, lib, pkgs, ... }:
 let
   cfg = config.certbot-vault-gandi;
