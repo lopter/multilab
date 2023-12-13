@@ -1,11 +1,15 @@
+# NOTE(2023-11-22):
+#
+# This seems unused, also it's already in nixpkgs. Maybe it can be pulled from
+# pkgs.pkgsCross.raspberryPi to add it to the docker images.
 { buildPlatformPkgs, hostPlatformPkgs }:
   let
-    mkPymonome = { pname, version, src, meta }:
+    mkRemotePdb = { pname, version, src, meta }:
       hostPlatformPkgs.python3Packages.buildPythonPackage rec {
         inherit pname version src meta;
       };
   in
-    mkPymonome rec {
+    mkRemotePdb rec {
       pname = "remote-pdb";
       version = "2.1.0";
       src = buildPlatformPkgs.python3Packages.fetchPypi {
