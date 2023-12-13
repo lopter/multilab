@@ -1,13 +1,7 @@
 {
   perSystem = { pkgs, ... }:
     let
-      python3Debug = pkgs.python3.override {
-        self = python3Debug;
-        stdenv = pkgs.stdenvAdapters.keepDebugInfo pkgs.stdenv;
-      };
-
-      python3Packages = python3Debug.pkgs;
-      systemPkgs = { buildPlatformPkgs = pkgs; inherit python3Packages; };
+      systemPkgs = { buildPlatformPkgs = pkgs; inherit (pkgs) python3Packages; };
 
       mkOFXStatement = import ../../../third_party/pypi/ofxstatement.nix;
       ofxstatement = mkOFXStatement systemPkgs;
@@ -20,7 +14,8 @@
           propagatedBuildInputs = [ ofxstatement ];
         };
         ofxstatement-common = mkOFXStatementCommon {
-          inherit python3Packages ofxstatement;
+          inherit ofxstatement;
+          inherit (pkgs) python3Packages;
         };
 
       mkOFXStatementUSSchwab = { python3Packages, ofxstatement, ofxstatement-common }:
@@ -36,11 +31,12 @@
           doCheck = false;
         };
         ofxstatement-us-schwab = mkOFXStatementUSSchwab {
-          inherit python3Packages ofxstatement ofxstatement-common;
+          inherit ofxstatement ofxstatement-common;
+          inherit (pkgs) python3Packages;
         };
     in {
       devShells.ofxstatement = pkgs.mkShell {
-        buildInputs = [ ofxstatement-us-schwab python3Packages.ipython ];
+        buildInputs = [ ofxstatement-us-schwab pkgs.python3Packages.ipython ];
       };
     };
 }
